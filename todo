@@ -4,7 +4,7 @@ Create working routes for all CRUD operations:
 - Create show_many() ✓
 - Create show() ✓
 - Create create() ✓
-- Create edit()
-- Create delete()
+- Create update() ✓
+- Create delete() 
 Failsafe the server so that no user request can crash it
 Add request authentication

@@ -28,7 +28,7 @@ class LanguagesController < ApplicationController
 
         parameters = params.require(:language).permit(:name, :released_year, :githut_rank, :pypl_rank, :tiobe_rank)
 
-        l = Language.where("name = ?", parameters[:name]).pluck(:id).first
+        l = Language.where("name = ?", parameters[:name]).pluck(:id).first # Returns nil if record doesn't exist, else returns record ID
 
         if l.nil?
 
@@ -44,15 +44,16 @@ class LanguagesController < ApplicationController
         
                 end
 
-                language.save
+                language.save!
 
                 render :json => pretty_print_for_render(generate_return({:languageID => language.id, :create => {
                     id: language.id, 
+                    name: language.name,
                     released_year: language.released_year, 
                     githut_rank: language.githut_rank,
                     pypl_rank: language.pypl_rank,
                     tiobe_rank: language.tiobe_rank
-                    }}))
+                    }})), status: 200
 
             rescue
 
@@ -62,10 +63,57 @@ class LanguagesController < ApplicationController
 
         else
 
-            render json: { error: "There already exists a language with that name (ID is #{l})\nDid you mean to PUT?"}
+            render json: { error: "There already exists a language with that name (ID is #{l})\nDid you mean to PUT?" }, status: 400
         
 
         end
+
+    end
+
+    def update
+
+        parameters = params.require(:language).permit(:name, :released_year, :githut_rank, :pypl_rank, :tiobe_rank)
+
+        l = Language.where("id = ?", params[:languageID]).pluck(:id).first # this will also return nill if record isn't there
+                                                                              # otherwise it will return the id but since we already
+                                                                              # have it, it's a bit useless. too bad!
+
+        if l.nil?
+
+            render json:{ error: "There exists no language with ID #{l}\nDid you mean to POST?" }, status: 400
+
+        else
+
+            begin
+
+                language = Language.find(l)
+
+                language.update(
+                    name: parameters[:name], 
+                    released_year: parameters[:released_year], 
+                    githut_rank: parameters[:githut_rank], 
+                    pypl_rank: parameters[:pypl_rank],
+                    tiobe_rank: parameters[:tiobe_rank]
+                    )
+                
+                language.save!
+
+                render :json => pretty_print_for_render(generate_return({:languageID => language.id, :update => {
+                    id: language.id, 
+                    name: language.name,
+                    released_year: language.released_year, 
+                    githut_rank: language.githut_rank,
+                    pypl_rank: language.pypl_rank,
+                    tiobe_rank: language.tiobe_rank
+                    }})), status: 200
+
+            rescue
+
+            end
+
+        end
+
+
 
     end
 
@@ -100,9 +148,13 @@ class LanguagesController < ApplicationController
 
             return { :data => normalize_return(Language.offset(args[:per_page] * args[:page]).limit(args[:per_page])), :meta => { page: args[:page] } }
 
-        elsif args[:languageID] && args[:create]
+        elsif args[:create]
 
-            return { :message => "ok", :meta => args[:create]}
+            return { :message => "ok", :created => args[:create] }
+
+        elsif args[:update]
+
+            return { :message => "ok", :updated => args[:update] }
 
         elsif args[:languageID]
 
