@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get "/programming_languages/:languageID", to: "languages#show"
   post "/programming_languages", to: "languages#create"
   put "/programming_languages/:languageID", to: "languages#update"
+  delete "/programming_languages/:languageID", to: "languages#delete"
   # Defines the root path route ("/")
   # root "articles#index"
 end

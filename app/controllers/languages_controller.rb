@@ -109,11 +109,54 @@ class LanguagesController < ApplicationController
 
             rescue
 
+                render head: 400
+
             end
 
         end
 
 
+
+    end
+
+    def delete
+
+        id = params[:languageID]
+
+        l = Language.where("id = ?", id).pluck(:id).first
+
+        if l.nil?
+
+            render json: { error: "There exists no language with ID of #{l}" }, status: 400
+
+        else
+
+            language = Language.find(l)
+
+            begin
+
+                deleted = {
+                    id: language.id, 
+                    name: language.name,
+                    released_year: language.released_year,
+                    githut_rank: language.githut_rank,
+                    pypl_rank: language.pypl_rank,
+                    tiobe_rank: language.tiobe_rank,
+                    created_at: language.created_at,
+                    last_updated_at: lanugage.updated_at
+                }
+
+                language.destroy
+
+                render :json => pretty_print_for_render(generate_return({ :languageID => l, :deleted => deleted})), status: 200
+
+            rescue
+
+                render head: 500
+
+            end
+
+        end
 
     end
 

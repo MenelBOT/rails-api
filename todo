@@ -5,6 +5,6 @@ Create working routes for all CRUD operations:
 - Create show() ✓
 - Create create() ✓
 - Create update() ✓
-- Create delete() 
-Failsafe the server so that no user request can crash it
+- Create delete() ✓
+Failsafe the server so that no user request can crash it ✓ (rails already does this by default iirc)
 Add request authentication
