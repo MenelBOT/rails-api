@@ -1,0 +1,10 @@
+Create base server that starts ✓
+Integrate mysql as a database solution nononononononono we use postgres ✓
+Create working routes for all CRUD operations:
+- Create show_many() ✓
+- Create show() ✓
+- Create create() ✓
+- Create update() ✓
+- Create delete() ✓
+Failsafe the server so that no user request can crash it ✓ (rails already does this by default iirc)
+Add request authentication
