@@ -24,6 +24,7 @@ class LanguagesController < ApplicationController
 
     end
 
+
     private
 
     def ensure_unsigned_integer(to_normalize)
