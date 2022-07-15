@@ -2,7 +2,7 @@ module LanguageHelper
 
     def normalize_return(query_return)
 
-        if query_return.is_a Array
+        if query_return.kind_of?(Array)
 
             #
             # TODO: MAKE THIS CHECK IF IT'S AN EMPTY ARRAY YOU KNOW WHAT
@@ -11,6 +11,10 @@ module LanguageHelper
 
 
             return query_return
+
+        elsif query_return.empty?
+
+            return []
 
         else
 
